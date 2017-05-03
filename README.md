@@ -1,5 +1,5 @@
 # search
-Ajax search example
+#Ajax search example
 #运行该案例的步骤
 
 一、首先将通过search.sql文件将数据库导入到mysql数据库中
