@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax 搜索提示</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.tmpl.js"></script>
+</head>
+<body>
+    <div class="wrap" class="clearfix">
+        <input type="text" name="keyword" id="keyword" autocomplete="off" placeholder="爆款低至五折">
+        <button id="search"></button>
+        <ul class="list"></ul>
+    </div>
+    <script id="tempList" type="text/x-jquery-tmpl">
+            <li class="list-item"><span>${keyword}</span><i>约${amount}个商品</i></li>
+    </script>
+    <script>
+
+        //监听搜索框的输入事件
+        $("#keyword").on('input',function () {
+            var keyword = $(this).val();   //获取当前搜索关键词
+            //发送ajax请求并带上搜索关键词
+            $.get("getwords.php",{keyword:keyword},function(data,statusText,xhr){
+                data = JSON.parse(data);
+                //console.log(data);
+                //判断相关关键词条数组是否为空
+                if(data.length>0){
+                    $(".list").html("").show();
+                    $("#tempList").tmpl(data).appendTo(".list");
+                }
+                else{
+                    //若关键词条数组为空，则隐藏下拉列表
+                    $(".list").html("").hide();
+                }
+
+            });
+        });
+
+
+        //搜索框获得焦点是显示下拉列表
+        $("#keyword").focus(function(){
+            $(".list").show();
+        });
+
+        //将下拉列表中关键词条的点击事件委托到其父容器上
+        $(".list").on("click",".list-item",function(ev){
+            var text = $(this).find("span").html();
+            $("#keyword").val(text);
+            $(".list").hide();
+        })
+    </script>
+</body>
+</html>
