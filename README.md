@@ -1,2 +1,0 @@
-# search
-Ajax search example
